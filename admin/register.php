@@ -16,7 +16,13 @@ $name_error =
     $password =
     $confirm_password = '';
 
-
+function emailUnique($value, $mysqli)
+{
+    $sql = "SELECT count(id) as count FROM `users` WHERE email='$value'";
+    $res = $mysqli->query($sql);
+    $data = $res->fetch_assoc();
+    return $data['count'];
+}
 if (isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
     $name = $mysqli->real_escape_string($_POST['name']);
     $email = $mysqli->real_escape_string($_POST['email']);
@@ -45,6 +51,9 @@ if (isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
     } else if (strlen($email) >= 100) {
         $error = true;
         $email_error = "Email must be greather then 100.";
+    } elseif (emailUnique($email, $mysqli) > 0) {
+        $error = true;
+        $email_error = "This email is already register.";
     }
     // Phone Validation
     if (strlen($phone) === 0) {
@@ -77,6 +86,30 @@ if (isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
     else if ($password !== $confirm_password) {
         $error = true;
         $confirm_password_error = "Password and Confirm Password are not same.";
+    } else {
+        $byscript_password = md5($password);
+    }
+    if (!$error) {
+        $sql = "INSERT INTO `users` 
+                (`name`, 
+                `email`, 
+                `password`, 
+                `role`, 
+                `phone`, 
+                `gender`) 
+                VALUES
+                ('$name', 
+                '$email', 
+                '$byscript_password', 
+                'user', 
+                '$phone', 
+                '$gender')";
+        $result  = $mysqli->query($sql);
+        if ($result) {
+            $url = $admin_base_url . 'login.php?success=Register Success';
+            header("Location: $url");
+            exit;
+        }
     }
 }
 ?>
@@ -131,7 +164,7 @@ if (isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
                                     <div class="form-group">
                                         <input type="email" class="form-control" placeholder="Email" name="email" value="<?= $email ?>" />
                                         <?php if ($error && $email_error) { ?>
-                                            <span class="text-danger"><?= $name_error ?></span>
+                                            <span class="text-danger"><?= $email_error ?></span>
                                         <?php } ?>
                                     </div>
                                     <div class="form-group">
