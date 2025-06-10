@@ -16,26 +16,11 @@ require '../require/common.php';
     <link rel="icon" type="image/png" sizes="16x16" href="images/favicon.png">
     <!-- Custom Stylesheet -->
     <link href="css/style.css" rel="stylesheet">
-
+    <script src="js/sweetalert2/dist/sweetalert2.all.min.js"></script>
+    <script src="js/jquery/dist/jquery.min.js"></script>
 </head>
 
 <body>
-
-    <!--*******************
-        Preloader start
-    ********************-->
-    <div id="preloader">
-        <div class="loader">
-            <svg class="circular" viewBox="25 25 50 50">
-                <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="3" stroke-miterlimit="10" />
-            </svg>
-        </div>
-    </div>
-    <!--*******************
-        Preloader end
-    ********************-->
-
-
     <!--**********************************
         Main wrapper start
     ***********************************-->
