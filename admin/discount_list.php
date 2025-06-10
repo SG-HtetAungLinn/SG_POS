@@ -4,12 +4,12 @@ require '../require/db.php';
 require '../require/common.php';
 $success = isset($_GET['success']) ? $_GET['success'] : '';
 $error = isset($_GET['error']) ? $_GET['error'] : '';
-$res = selectData('categories', $mysqli, "", "*", "ORDER BY created_at DESC");
+$res = selectData('discounts', $mysqli, "", "*", "ORDER BY created_at DESC");
 $delete_id = isset($_GET['delete_id']) ?  $_GET['delete_id'] : '';
 if ($delete_id !== '') {
-    $res = deleteData('categories', $mysqli, "id=$delete_id");
+    $res = deleteData('discounts', $mysqli, "id=$delete_id");
     if ($res) {
-        $url = $admin_base_url . "category_list.php?success=Delete Category Success";
+        $url = $admin_base_url . "discount_list.php?success=Delete Discount Success";
         header("Location: $url");
     }
 }
@@ -18,10 +18,10 @@ require './layouts/header.php';
 <div class="content-body">
     <div class="container-fluid">
         <div class="d-flex justify-content-between">
-            <h1>Category List</h1>
+            <h1>Discount List</h1>
             <div class="">
-                <a href="<?= $admin_base_url . 'category_create.php' ?>" class="btn btn-primary">
-                    Create Category
+                <a href="<?= $admin_base_url . 'discount_create.php' ?>" class="btn btn-primary">
+                    Create Discount
                 </a>
             </div>
         </div>
@@ -61,7 +61,7 @@ require './layouts/header.php';
                                             <td><?= date("Y-m-d g:i:s A", strtotime($row['updated_at'])) ?></td>
                                             <td><?= date("Y-m-d g:i:s A", strtotime($row['created_at'])) ?></td>
                                             <td>
-                                                <a href="<?= $admin_base_url . 'category_edit.php?id=' . $row['id'] ?>" class="btn btn-sm btn-primary">Edit</a>
+                                                <a href="<?= $admin_base_url . 'discount_edit.php?id=' . $row['id'] ?>" class="btn btn-sm btn-primary">Edit</a>
                                                 <button data-id="<?= $row['id'] ?>" class="btn btn-sm btn-danger delete_btn">Delete</button>
                                             </td>
                                         </tr>
@@ -93,7 +93,7 @@ require './layouts/header.php';
                 confirmButtonText: 'Yes, delete it!'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    window.location.href = 'category_list.php?delete_id=' + id
+                    window.location.href = 'discount_list.php?delete_id=' + id
                 }
             });
         })
