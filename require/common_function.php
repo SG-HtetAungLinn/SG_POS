@@ -26,7 +26,7 @@ function updateData($table, $mysqli, $data, $where)
     foreach ($where as $key => $value) {
         $wheres[] = "`$key` = '$value'";
     }
-    $sql .= implode(", ", $wheres);
+    $sql .= implode(" AND ", $wheres);
     return $mysqli->query($sql);
 }
 
@@ -44,5 +44,7 @@ function insertData($table, $mysqli, $values)
             ($colums)
             VALUES
             ($values)";
+    var_dump($sql);
+    exit;
     return $mysqli->query($sql);
 }

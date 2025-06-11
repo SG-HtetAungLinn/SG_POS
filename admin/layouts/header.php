@@ -245,7 +245,7 @@ require '../require/common.php';
 
                     <li>
                         <a class="has-arrow" href="javascript:void()" aria-expanded="false">
-                            <i class="icon-screen-tablet menu-icon"></i><span class="nav-text">Category</span>
+                            <i class="icon-list menu-icon"></i><span class="nav-text">Category</span>
                         </a>
                         <ul aria-expanded="false">
                             <li><a href="<?= $admin_base_url . 'category_list.php' ?>">List</a></li>
@@ -254,7 +254,7 @@ require '../require/common.php';
                     </li>
                     <li>
                         <a class="has-arrow" href="javascript:void()" aria-expanded="false">
-                            <i class="icon-screen-tablet menu-icon"></i><span class="nav-text">Payment</span>
+                            <i class="icon-wallet menu-icon"></i><span class="nav-text">Payment</span>
                         </a>
                         <ul aria-expanded="false">
                             <li><a href="<?= $admin_base_url . 'payment_list.php' ?>">List</a></li>
@@ -263,11 +263,20 @@ require '../require/common.php';
                     </li>
                     <li>
                         <a class="has-arrow" href="javascript:void()" aria-expanded="false">
-                            <i class="icon-screen-tablet menu-icon"></i><span class="nav-text">Discount</span>
+                            <i class="icon-graph menu-icon"></i><span class="nav-text">Discount</span>
                         </a>
                         <ul aria-expanded="false">
                             <li><a href="<?= $admin_base_url . 'discount_list.php' ?>">List</a></li>
                             <li><a href="<?= $admin_base_url . 'discount_create.php' ?>">Create</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                            <i class="icon-grid menu-icon"></i><span class="nav-text">Product</span>
+                        </a>
+                        <ul aria-expanded="false">
+                            <li><a href="<?= $admin_base_url . 'product_list.php' ?>">List</a></li>
+                            <li><a href="<?= $admin_base_url . 'product_create.php' ?>">Create</a></li>
                         </ul>
                     </li>
 
