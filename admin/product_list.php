@@ -45,13 +45,13 @@ require './layouts/header.php';
                         <table class="table table-hover table-sm">
                             <thead>
                                 <tr>
-                                    <th class="col-1">No.</th>
-                                    <th class="col-2">Name</th>
-                                    <th class="col-2">Start Date</th>
-                                    <th class="col-2">End Date</th>
-                                    <th class="col-2">Updated At</th>
-                                    <th class="col-2">Created At</th>
-                                    <th class="col-1">Action</th>
+                                    <th class="">No.</th>
+                                    <th class="">Name</th>
+                                    <th class="">Start Date</th>
+                                    <th class="">End Date</th>
+                                    <th class="">Updated At</th>
+                                    <th class="">Created At</th>
+                                    <th class="">Action</th>
                                 </tr>
                             </thead>
                             <tbody>

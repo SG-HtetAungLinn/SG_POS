@@ -98,7 +98,7 @@ if (isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
         $data = [
             'name'              => $name,
             'category_id'       => $category,
-            'discount_id '      => $discount,
+            'discount_id'       => $discount,
             'stock_count'       => $stock_count,
             'sale_price'        => $sale_price,
             'purchase_price'    => $purchase_price,
@@ -107,7 +107,7 @@ if (isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
         ];
         $result = insertData('products', $mysqli, $data);
         if ($result) {
-            $url = $admin_base_url . 'product_list.php?success=Register Success';
+            $url = $admin_base_url . 'product_image.php?id=' . $mysqli->insert_id;
             header("Location: $url");
             exit;
         } else {

@@ -44,7 +44,5 @@ function insertData($table, $mysqli, $values)
             ($colums)
             VALUES
             ($values)";
-    var_dump($sql);
-    exit;
     return $mysqli->query($sql);
 }

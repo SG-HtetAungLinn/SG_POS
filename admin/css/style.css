@@ -22197,4 +22197,9 @@ html[dir="rtl"] [direction="rtl"][data-sidebar-style="compact"]:not([data-layout
   color: #fff;
 }
 
+.preview_img {
+  width: 200px;
+  border: 2px solid gray;
+}
+
 /*# sourceMappingURL=style.css.map */
