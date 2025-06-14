@@ -2,6 +2,7 @@
 require '../require/db.php';
 require '../require/common.php';
 require '../require/common_function.php';
+
 $error = false;
 $error_message =
     $name_error =
@@ -20,6 +21,10 @@ $error_message =
     $purchase_price =
     $expire_date_error =
     $expire_date =  '';
+if (isset($_GET['error'])) {
+    $error = true;
+    $error_message = $_GET['error'];
+}
 $category_res = selectData('categories', $mysqli);
 $discount_res = selectData('discounts', $mysqli);
 if (isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
