@@ -4,7 +4,17 @@ require '../require/db.php';
 require '../require/common.php';
 $success = isset($_GET['success']) ? $_GET['success'] : '';
 $error = isset($_GET['error']) ? $_GET['error'] : '';
-$res = selectData('products', $mysqli, "", "*", "ORDER BY created_at DESC");
+// $res = selectData('products', $mysqli, "", "*", "ORDER BY created_at DESC");
+
+$sql = "SELECT products.*, categories.name AS category_name, discounts.percent
+        FROM `products`
+        LEFT JOIN `categories` ON categories.id = products.category_id
+        LEFT JOIN `discounts` ON discounts.id = products.discount_id
+        ";
+$res = $mysqli->query($sql);
+
+
+
 $delete_id = isset($_GET['delete_id']) ?  $_GET['delete_id'] : '';
 if ($delete_id !== '') {
     $res = deleteData('products', $mysqli, "id=$delete_id");
@@ -47,9 +57,12 @@ require './layouts/header.php';
                                 <tr>
                                     <th class="">No.</th>
                                     <th class="">Name</th>
-                                    <th class="">Start Date</th>
-                                    <th class="">End Date</th>
-                                    <th class="">Updated At</th>
+                                    <th class="">Category</th>
+                                    <th class="">Discount</th>
+                                    <th class="">Stock Count</th>
+                                    <th class="">Sale Price</th>
+                                    <th class="">Purchase Price</th>
+                                    <th class="">Expire Date</th>
                                     <th class="">Created At</th>
                                     <th class="">Action</th>
                                 </tr>
@@ -60,8 +73,12 @@ require './layouts/header.php';
                                         <tr>
                                             <td><?= $row['id'] ?></td>
                                             <td><?= $row['name'] ?></td>
-                                            <td><?= $row['start_date'] ?></td>
-                                            <td><?= $row['end_date'] ?></td>
+                                            <td><?= $row['category_name'] ?></td>
+                                            <td><?= isset($row['percent']) ? $row['percent'] . '%' : '-' ?></td>
+                                            <td><?= $row['stock_count'] ?></td>
+                                            <td><?= $row['sale_price'] ?>MMK</td>
+                                            <td><?= $row['purchase_price'] ?>MMK</td>
+                                            <td><?= $row['expire_date'] !== '0000-00-00' ? $row['expire_date'] : '-' ?></td>
                                             <td><?= date("Y-m-d g:i:s A", strtotime($row['updated_at'])) ?></td>
                                             <td><?= date("Y-m-d g:i:s A", strtotime($row['created_at'])) ?></td>
                                             <td>
