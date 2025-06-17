@@ -156,7 +156,7 @@ require './layouts/header.php';
                             </div>
                             <div class="form-group">
                                 <label for="description" class="form-label">Description</label>
-                                <textarea name="description" class="form-control" placeholder="Enter Product Description" id="description"></textarea>
+                                <textarea name="description" class="form-control" placeholder="Enter Product Description" id="description"><?= $description ?></textarea>
                                 <?php if ($error && $description_error) { ?>
                                     <span class="text-danger"><?= $description_error ?></span>
                                 <?php } ?>
@@ -167,7 +167,7 @@ require './layouts/header.php';
                                     <option value="">Please Choose Category</option>
                                     <?php if ($category_res->num_rows > 0) {
                                         while ($row = $category_res->fetch_assoc()) { ?>
-                                            <option value="<?= $row['id'] ?>"><?= $row['name'] ?></option>
+                                            <option value="<?= $row['id'] ?>" <?= $row['id'] == $category ? "selected" : "" ?>><?= $row['name'] ?></option>
                                     <?php }
                                     } ?>
                                 </select>
@@ -181,7 +181,7 @@ require './layouts/header.php';
                                     <option value="">Please Choose Discount</option>
                                     <?php if ($discount_res->num_rows > 0) {
                                         while ($row = $discount_res->fetch_assoc()) { ?>
-                                            <option value="<?= $row['id'] ?>"><?= $row['percent'] ?>%</option>
+                                            <option value="<?= $row['id'] ?>" <?= $row['id'] == $discount ? "selected" : "" ?>><?= $row['percent'] ?>%</option>
                                     <?php }
                                     } ?>
                                 </select>

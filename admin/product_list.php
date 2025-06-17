@@ -82,7 +82,9 @@ require './layouts/header.php';
                                             <td><?= date("Y-m-d g:i:s A", strtotime($row['updated_at'])) ?></td>
                                             <td><?= date("Y-m-d g:i:s A", strtotime($row['created_at'])) ?></td>
                                             <td>
+                                                <a href="<?= $admin_base_url . 'product_details.php?id=' . $row['id'] ?>" class="btn btn-sm btn-primary">Details</a>
                                                 <a href="<?= $admin_base_url . 'product_edit.php?id=' . $row['id'] ?>" class="btn btn-sm btn-primary">Edit</a>
+                                                <a href="<?= $admin_base_url . 'product_image_update.php?id=' . $row['id'] ?>" class="btn btn-sm btn-primary">Image</a>
                                                 <button data-id="<?= $row['id'] ?>" class="btn btn-sm btn-danger delete_btn">Delete</button>
                                             </td>
                                         </tr>

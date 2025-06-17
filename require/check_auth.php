@@ -5,6 +5,6 @@ if (
     && !isset($_SESSION['email'])
     && !isset($_SESSION['role'])
 ) {
-    $url = $admin_base_url . 'login.php';
+    $url = $admin_base_url . 'logout.php';
     header("Location: $url");
 }
