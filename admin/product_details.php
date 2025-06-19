@@ -45,6 +45,11 @@ require './layouts/header.php';
     <div class="container-fluid">
         <div class="d-flex justify-content-between">
             <h1>Product Details</h1>
+            <div class="">
+                <a href="<?= $admin_base_url . 'product_list.php' ?>" class="btn btn-dark">
+                    Back
+                </a>
+            </div>
         </div>
         <div class="row">
             <div class="col-6">
