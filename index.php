@@ -1,5 +1,23 @@
 <?php
+session_start();
 require './require/db.php';
+require "./require/common.php";
+require "./require/common_function.php";
+require "./require/check_auth.php";
+
+$category_res = selectData('categories', $mysqli, "ORDER BY RAND() LIMIT 6");
+$new_product_sql = "SELECT 
+                    products.*, 
+                    categories.name AS category_name, 
+                    MIN(product_img.image) AS image
+                    FROM products
+                    LEFT JOIN categories ON categories.id = products.category_id
+                    LEFT JOIN product_img ON product_img.product_id = products.id
+                    GROUP BY products.id
+                    ORDER BY products.id DESC
+                    LIMIT 6";
+$new_product_res  = $mysqli->query($new_product_sql);
+
 ?>
 
 <!DOCTYPE html>
@@ -187,32 +205,32 @@ require './require/db.php';
 
                     <ul class="d-flex justify-content-end list-unstyled m-0">
                         <li>
-                            <a href="#" class="rounded-circle bg-light p-2 mx-1">
-                                <svg width="24" height="24" viewBox="0 0 24 24">
-                                    <use xlink:href="#user"></use>
-                                </svg>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" class="rounded-circle bg-light p-2 mx-1">
-                                <svg width="24" height="24" viewBox="0 0 24 24">
-                                    <use xlink:href="#heart"></use>
-                                </svg>
-                            </a>
-                        </li>
-                        <li class="d-lg-none">
-                            <a href="#" class="rounded-circle bg-light p-2 mx-1" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-controls="offcanvasCart">
-                                <svg width="24" height="24" viewBox="0 0 24 24">
-                                    <use xlink:href="#cart"></use>
-                                </svg>
-                            </a>
-                        </li>
-                        <li class="d-lg-none">
-                            <a href="#" class="rounded-circle bg-light p-2 mx-1" data-bs-toggle="offcanvas" data-bs-target="#offcanvasSearch" aria-controls="offcanvasSearch">
-                                <svg width="24" height="24" viewBox="0 0 24 24">
-                                    <use xlink:href="#search"></use>
-                                </svg>
-                            </a>
+                            <div class="dropdown">
+                                <a class="rounded-circle bg-light p-2 mx-1" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <svg width="24" height="24" viewBox="0 0 24 24">
+                                        <use xlink:href="#user"></use>
+                                    </svg>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <button class="dropdown-item" type="button">
+                                            <?= $_SESSION['name'] ?>
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button class="dropdown-item" type="button">
+                                            <span class="badge bg-primary text-light"><?= $_SESSION['role'] ?></span>
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="<?= $admin_base_url . "logout.php" ?>">
+                                            Logout
+                                        </a>
+                                    </li>
+
+                                </ul>
+                            </div>
+
                         </li>
                     </ul>
 
@@ -420,55 +438,14 @@ require './require/db.php';
 
                     <div class="category-carousel swiper">
                         <div class="swiper-wrapper">
-                            <a href="index.html" class="nav-link category-item swiper-slide">
-                                <img src="images/icon-vegetables-broccoli.png" alt="Category Thumbnail">
-                                <h3 class="category-title">Fruits & Veges</h3>
-                            </a>
-                            <a href="index.html" class="nav-link category-item swiper-slide">
-                                <img src="images/icon-bread-baguette.png" alt="Category Thumbnail">
-                                <h3 class="category-title">Breads & Sweets</h3>
-                            </a>
-                            <a href="index.html" class="nav-link category-item swiper-slide">
-                                <img src="images/icon-soft-drinks-bottle.png" alt="Category Thumbnail">
-                                <h3 class="category-title">Fruits & Veges</h3>
-                            </a>
-                            <a href="index.html" class="nav-link category-item swiper-slide">
-                                <img src="images/icon-wine-glass-bottle.png" alt="Category Thumbnail">
-                                <h3 class="category-title">Fruits & Veges</h3>
-                            </a>
-                            <a href="index.html" class="nav-link category-item swiper-slide">
-                                <img src="images/icon-animal-products-drumsticks.png" alt="Category Thumbnail">
-                                <h3 class="category-title">Fruits & Veges</h3>
-                            </a>
-                            <a href="index.html" class="nav-link category-item swiper-slide">
-                                <img src="images/icon-bread-herb-flour.png" alt="Category Thumbnail">
-                                <h3 class="category-title">Fruits & Veges</h3>
-                            </a>
-                            <a href="index.html" class="nav-link category-item swiper-slide">
-                                <img src="images/icon-vegetables-broccoli.png" alt="Category Thumbnail">
-                                <h3 class="category-title">Fruits & Veges</h3>
-                            </a>
-                            <a href="index.html" class="nav-link category-item swiper-slide">
-                                <img src="images/icon-vegetables-broccoli.png" alt="Category Thumbnail">
-                                <h3 class="category-title">Fruits & Veges</h3>
-                            </a>
-                            <a href="index.html" class="nav-link category-item swiper-slide">
-                                <img src="images/icon-vegetables-broccoli.png" alt="Category Thumbnail">
-                                <h3 class="category-title">Fruits & Veges</h3>
-                            </a>
-                            <a href="index.html" class="nav-link category-item swiper-slide">
-                                <img src="images/icon-vegetables-broccoli.png" alt="Category Thumbnail">
-                                <h3 class="category-title">Fruits & Veges</h3>
-                            </a>
-                            <a href="index.html" class="nav-link category-item swiper-slide">
-                                <img src="images/icon-vegetables-broccoli.png" alt="Category Thumbnail">
-                                <h3 class="category-title">Fruits & Veges</h3>
-                            </a>
-                            <a href="index.html" class="nav-link category-item swiper-slide">
-                                <img src="images/icon-vegetables-broccoli.png" alt="Category Thumbnail">
-                                <h3 class="category-title">Fruits & Veges</h3>
-                            </a>
-
+                            <?php if ($category_res->num_rows > 0) {
+                                while ($row = $category_res->fetch_assoc()) { ?>
+                                    <a href="index.html" class="nav-link category-item swiper-slide">
+                                        <img src="images/icon-vegetables-broccoli.png" alt="Category Thumbnail">
+                                        <h3 class="category-title"><?= $row['name'] ?></h3>
+                                    </a>
+                            <?php }
+                            } ?>
                         </div>
                     </div>
 
@@ -503,97 +480,26 @@ require './require/db.php';
 
                     <div class="brand-carousel swiper">
                         <div class="swiper-wrapper">
+                            <?php if ($new_product_res->num_rows > 0) {
+                                while ($row = $new_product_res->fetch_assoc()) { ?>
+                                    <div class="swiper-slide">
+                                        <div class="card mb-3 p-3 rounded-4 shadow border-0">
+                                            <div class="row g-0">
+                                                <div class="col-md-4">
+                                                    <img src="<?= $admin_base_url . "upload/" . $row['image'] ?>" class="img-fluid rounded" alt="Card title">
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <div class="card-body py-0">
+                                                        <p class="text-muted mb-0"><?= $row['category_name'] ?></p>
+                                                        <h5 class="card-title"><?= $row['name'] ?></h5>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                            <?php }
+                            } ?>
 
-                            <div class="swiper-slide">
-                                <div class="card mb-3 p-3 rounded-4 shadow border-0">
-                                    <div class="row g-0">
-                                        <div class="col-md-4">
-                                            <img src="images/product-thumb-11.jpg" class="img-fluid rounded" alt="Card title">
-                                        </div>
-                                        <div class="col-md-8">
-                                            <div class="card-body py-0">
-                                                <p class="text-muted mb-0">Amber Jar</p>
-                                                <h5 class="card-title">Honey best nectar you wish to get</h5>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="swiper-slide">
-                                <div class="card mb-3 p-3 rounded-4 shadow border-0">
-                                    <div class="row g-0">
-                                        <div class="col-md-4">
-                                            <img src="images/product-thumb-12.jpg" class="img-fluid rounded" alt="Card title">
-                                        </div>
-                                        <div class="col-md-8">
-                                            <div class="card-body py-0">
-                                                <p class="text-muted mb-0">Amber Jar</p>
-                                                <h5 class="card-title">Honey best nectar you wish to get</h5>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="swiper-slide">
-                                <div class="card mb-3 p-3 rounded-4 shadow border-0">
-                                    <div class="row g-0">
-                                        <div class="col-md-4">
-                                            <img src="images/product-thumb-13.jpg" class="img-fluid rounded" alt="Card title">
-                                        </div>
-                                        <div class="col-md-8">
-                                            <div class="card-body py-0">
-                                                <p class="text-muted mb-0">Amber Jar</p>
-                                                <h5 class="card-title">Honey best nectar you wish to get</h5>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="swiper-slide">
-                                <div class="card mb-3 p-3 rounded-4 shadow border-0">
-                                    <div class="row g-0">
-                                        <div class="col-md-4">
-                                            <img src="images/product-thumb-14.jpg" class="img-fluid rounded" alt="Card title">
-                                        </div>
-                                        <div class="col-md-8">
-                                            <div class="card-body py-0">
-                                                <p class="text-muted mb-0">Amber Jar</p>
-                                                <h5 class="card-title">Honey best nectar you wish to get</h5>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="swiper-slide">
-                                <div class="card mb-3 p-3 rounded-4 shadow border-0">
-                                    <div class="row g-0">
-                                        <div class="col-md-4">
-                                            <img src="images/product-thumb-11.jpg" class="img-fluid rounded" alt="Card title">
-                                        </div>
-                                        <div class="col-md-8">
-                                            <div class="card-body py-0">
-                                                <p class="text-muted mb-0">Amber Jar</p>
-                                                <h5 class="card-title">Honey best nectar you wish to get</h5>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="swiper-slide">
-                                <div class="card mb-3 p-3 rounded-4 shadow border-0">
-                                    <div class="row g-0">
-                                        <div class="col-md-4">
-                                            <img src="images/product-thumb-12.jpg" class="img-fluid rounded" alt="Card title">
-                                        </div>
-                                        <div class="col-md-8">
-                                            <div class="card-body py-0">
-                                                <p class="text-muted mb-0">Amber Jar</p>
-                                                <h5 class="card-title">Honey best nectar you wish to get</h5>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
 
                         </div>
                     </div>

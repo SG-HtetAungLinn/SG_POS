@@ -56,7 +56,7 @@ require './layouts/header.php';
                 <div class="card">
                     <div class="card-body">
                         <?php foreach ($img as $item) { ?>
-                            <img src="upload/<?= $item ?>" alt="<?= $item ?>" width="300px">
+                            <img src="upload/<?= $item ?>" alt="<?= $item ?>" class="m-2" width="300px">
                         <?php } ?>
                     </div>
                 </div>

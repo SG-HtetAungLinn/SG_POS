@@ -1,6 +1,6 @@
 <?php
-require '../require/db.php';
-require '../require/common.php';
+require './require/db.php';
+require './require/common.php';
 $error = false;
 $error_msg = '';
 $name_error =
@@ -106,7 +106,7 @@ if (isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
                 '$gender')";
         $result  = $mysqli->query($sql);
         if ($result) {
-            $url = $admin_base_url . 'login.php?success=Register Success';
+            $url = $base_url . 'login.php?success=Register Success';
             header("Location: $url");
             exit;
         }
@@ -123,8 +123,7 @@ if (isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
     <title>POS Register</title>
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="../../assets/images/favicon.png">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
-    <link href="css/style.css" rel="stylesheet">
+    <link href="admin/css/style.css" rel="stylesheet">
 
 </head>
 
@@ -192,7 +191,7 @@ if (isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
                                     <input type="hidden" name="form_sub" value="1" />
                                     <button class="btn login-form__btn submit w-100">Sign in</button>
                                 </form>
-                                <p class="mt-5 login-form__footer">Have account <a href="<?= $admin_base_url ?>login.php" class="text-primary">Sign In </a> now</p>
+                                <p class="mt-5 login-form__footer">Have account <a href="<?= $base_url ?>login.php" class="text-primary">Sign In </a> now</p>
                                 </p>
                             </div>
                         </div>

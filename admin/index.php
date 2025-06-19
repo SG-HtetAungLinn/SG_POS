@@ -19,7 +19,7 @@ require './layouts/header.php';
     <!-- row -->
 
     <div class="container-fluid">
-
+    
     </div>
     <!-- #/ container -->
 </div>
