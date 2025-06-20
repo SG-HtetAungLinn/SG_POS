@@ -30,6 +30,7 @@ if (isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
                 $_SESSION['name'] = $data['name'];
                 $_SESSION['email'] = $data['email'];
                 $_SESSION['role'] = $data['role'];
+                $_SESSION['id'] = $data['id'];
                 if ($data['role'] == 'admin') {
                     $url = $admin_base_url . "category_list.php?success=Login Success";
                 } else {
