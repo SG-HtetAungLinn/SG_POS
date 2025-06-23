@@ -2,21 +2,34 @@
 require "./require/db.php";
 require "./require/common.php";
 require "./require/common_function.php";
-$product_id     = isset($_GET['product_id']) ? $_GET['product_id'] : '';
-$price          = isset($_GET['price']) ? $_GET['price'] : '';
-$customer_id    = isset($_GET['customer_id']) ? $_GET['customer_id'] : '';
-$qty            = isset($_GET['qty']) ? $_GET['qty'] : '';
+header('Content-Type: application/json');
+$product_id     = isset($_POST['product_id']) ? $_POST['product_id'] : '';
+$price          = isset($_POST['price']) ? $_POST['price'] : '';
+$customer_id    = isset($_POST['customer_id']) ? $_POST['customer_id'] : '';
+$qty            = isset($_POST['qty']) ? $_POST['qty'] : '';
 if ($product_id && $price && $customer_id && $qty) {
-    $data = [
-        'product_id'    => $product_id,
-        'customer_id'   => $customer_id,
-        'qty'           => $qty,
-        'description'   => '',
-    ];
-    $cart_res  = insertData('carts', $mysqli, $data);
-    if ($cart_res) {
-        $url  = $base_url . "index.php?success=Add Cart Success";
-        header("Location: $url");
-        exit;
+
+    $selectRes = selectData('carts', $mysqli, "WHERE customer_id='$customer_id' AND product_id=$product_id");
+    if ($selectRes->num_rows > 0) {
+        $data = $selectRes->fetch_assoc();
+        $totalQty =  $data['qty'] + $qty;
+        $updateData = [
+            'qty' => $totalQty
+        ];
+        $where = [
+            'customer_id' => $customer_id,
+            'product_id' => $product_id
+        ];
+        updateData('carts', $mysqli, $updateData, $where);
+    } else {
+        $data = [
+            'product_id'    => $product_id,
+            'customer_id'   => $customer_id,
+            'qty'           => $qty,
+            'description'   => '',
+        ];
+        $cart_res  = insertData('carts', $mysqli, $data);
     }
+
+    echo json_encode(true);
 }

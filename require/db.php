@@ -40,22 +40,11 @@ function create_table($mysqli)
                 role ENUM('admin','user') NOT NULL,
                 phone VARCHAR(50) NOT NULL,
                 gender ENUM('male','female') NOT NULL,
+                address TEXT DEFAULT NULL,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP 
                 )";
     if ($mysqli->query($user_sql) === false) return false;
-
-    // Customer
-    $customer_sql = "CREATE TABLE IF NOT EXISTS `customers`
-                (
-                id INT AUTO_INCREMENT PRIMARY KEY,
-                name VARCHAR(100) NOT NULL,
-                phone VARCHAR(50) NOT NULL,
-                address TEXT NOT NULL,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP 
-                )";
-    if ($mysqli->query($customer_sql) === false) return false;
 
     // Category
     $category_sql = "CREATE TABLE IF NOT EXISTS `categories`
