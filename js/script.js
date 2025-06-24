@@ -154,29 +154,5 @@
 
   }); // End of a document
 
-  $('.add_cart').click(function () {
-    const container = $(this).closest('.product_item');
-    const productId = container.find('.product_id').val();
-    const price = container.find('.price').val();
-    const customerId = container.find('.customer_id').val();
-    const quantity = container.find('input[name="quantity"]').val();
-    // window.location.href = `cart.php?product_id=${productId}&price=${price}&customer_id=${customerId}&qty=${quantity}`
-    $.ajax({
-      url: 'cart.php',
-      type: 'POST',
-      data: {
-        product_id: productId,
-        price: price,
-        customer_id: customerId,
-        qty: quantity,
-      },
-      dataType: 'json',
-      success: function (response) {
-      },
-      error: function (xhr, status, error) {
-        console.error(error);
-      }
-    });
 
-  })
 })(jQuery);

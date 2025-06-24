@@ -75,7 +75,7 @@ function create_table($mysqli)
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 name VARCHAR(100) NOT NULL,
                 category_id INT NOT NULL,
-                discount_id INT NOT NULL,
+                discount_id INT DEFAULT NULL,
                 stock_count INT NOT NULL,
                 sale_price INT NOT NULL,
                 purchase_price INT NOT NULL,
@@ -105,13 +105,13 @@ function create_table($mysqli)
                 (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 product_id INT NOT NULL,
-                customer_id INT NOT NULL,
+                user_id INT NOT NULL,
                 qty INT NOT NULL,
                 description TEXT NULL,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE,
-                FOREIGN KEY (customer_id) REFERENCES customers(id) ON DELETE CASCADE
+                FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
                 )";
     if ($mysqli->query($cart_sql) === false) return false;
 
@@ -130,14 +130,14 @@ function create_table($mysqli)
                 (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 product_id INT NOT NULL,
-                customer_id INT NOT NULL,
+                user_id INT NOT NULL,
                 payment_id INT NOT NULL,
                 qty INT NOT NULL,
                 description TEXT NULL,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE,
-                FOREIGN KEY (customer_id) REFERENCES customers(id) ON DELETE CASCADE,
+                FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
                 FOREIGN KEY (payment_id) REFERENCES payments(id) ON DELETE CASCADE
                 )";
     if ($mysqli->query($order_sql) === false) return false;

@@ -57,7 +57,16 @@ $trending_product_res  = $mysqli->query($trending_product_sql);
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&family=Open+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
-
+    <style>
+        .success_alert {
+            position: fixed;
+            right: 50px;
+            top: 120px;
+            width: 400px;
+            z-index: 2000;
+            display: none;
+        }
+    </style>
 </head>
 
 <body>
@@ -116,7 +125,9 @@ $trending_product_res  = $mysqli->query($trending_product_sql);
         <div class="preloader">
         </div>
     </div>
-
+    <div class="alert alert-success success_alert">
+        alert
+    </div>
     <div class="offcanvas offcanvas-end" data-bs-scroll="true" tabindex="-1" id="offcanvasCart" aria-labelledby="My Cart">
         <div class="offcanvas-header justify-content-center">
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -125,35 +136,15 @@ $trending_product_res  = $mysqli->query($trending_product_sql);
             <div class="order-md-last">
                 <h4 class="d-flex justify-content-between align-items-center mb-3">
                     <span class="text-primary">Your cart</span>
-                    <span class="badge bg-primary rounded-pill">3</span>
+                    <span class="badge bg-primary rounded-pill cart_counts"></span>
                 </h4>
-                <ul class="list-group mb-3">
-                    <li class="list-group-item d-flex justify-content-between lh-sm">
-                        <div>
-                            <h6 class="my-0">Growers cider</h6>
-                            <small class="text-body-secondary">Brief description</small>
-                        </div>
-                        <span class="text-body-secondary">$12</span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between lh-sm">
-                        <div>
-                            <h6 class="my-0">Fresh grapes</h6>
-                            <small class="text-body-secondary">Brief description</small>
-                        </div>
-                        <span class="text-body-secondary">$8</span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between lh-sm">
-                        <div>
-                            <h6 class="my-0">Heinz tomato ketchup</h6>
-                            <small class="text-body-secondary">Brief description</small>
-                        </div>
-                        <span class="text-body-secondary">$5</span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between">
-                        <span>Total (USD)</span>
-                        <strong>$20</strong>
-                    </li>
+                <ul class="list-group mb-3 cart_lists">
+
                 </ul>
+                <div class="list-group-item d-flex justify-content-between mb-3">
+                    <span>Total (MMK)</span>
+                    <strong class="total_cart_price"></strong>
+                </div>
                 <button class="w-100 btn btn-primary btn-lg" type="submit">Continue to checkout</button>
             </div>
         </div>
@@ -250,7 +241,7 @@ $trending_product_res  = $mysqli->query($trending_product_sql);
                     <div class="cart text-end d-none d-lg-block dropdown">
                         <button class="border-0 bg-transparent d-flex flex-column gap-2 lh-1" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-controls="offcanvasCart">
                             <span class="fs-6 text-muted dropdown-toggle">Your Cart</span>
-                            <span class="cart-total fs-5 fw-bold">$1290.00</span>
+                            <span class="cart-total fs-5 fw-bold total_cart_price"></span>
                         </button>
                     </div>
                 </div>
@@ -469,7 +460,9 @@ $trending_product_res  = $mysqli->query($trending_product_sql);
                                 <div class="product-grid row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5">
 
                                     <?php if ($trending_product_res->num_rows > 0) {
-                                        while ($row = $trending_product_res->fetch_assoc()) { ?>
+                                        while ($row = $trending_product_res->fetch_assoc()) {
+                                            var_dump($row['discount_id'] > 0);
+                                    ?>
                                             <div class="col">
                                                 <div class="product-item">
                                                     <?php if ($row['discount_id'] > 0) { ?>
@@ -493,7 +486,10 @@ $trending_product_res  = $mysqli->query($trending_product_sql);
                                                             ($row['sale_price'] * $row['percent']) / 100);
                                                     }
                                                     ?>
-                                                    <span class="price"><span class="<?= $discount_price != "" ? "text-decoration-line-through text-muted" : "" ?>"><?= $row['sale_price'] ?></span> <?= $discount_price . $money_sign ?></span>
+                                                    <span class="price">
+                                                        <span class="<?= $discount_price != "" ? "text-decoration-line-through text-muted" : "" ?>"><?= $row['sale_price'] ?></span>
+                                                        <?= $discount_price . $money_sign ?>
+                                                    </span>
                                                     <div class="d-flex align-items-center justify-content-between product_item">
                                                         <div class="input-group product-qty">
                                                             <span class="input-group-btn">
@@ -514,7 +510,7 @@ $trending_product_res  = $mysqli->query($trending_product_sql);
                                                         </div>
                                                         <input type="hidden" class="product_id" name="product_id" value="<?= $row['id'] ?>">
                                                         <input type="hidden" class="price" name="price" value="<?= $discount_price ? $discount_price : $row['sale_price'] ?>">
-                                                        <input type="hidden" class="customer_id" name="customer_id" value="<?= $_SESSION['id'] ?>">
+                                                        <input type="hidden" class="user_id" name="user_id" value="<?= $_SESSION['id'] ?>">
                                                         <button type="button" class="nav-link add_cart">Add to Cart <iconify-icon icon="uil:shopping-cart"></a>
                                                     </div>
                                                 </div>
@@ -1508,10 +1504,90 @@ $trending_product_res  = $mysqli->query($trending_product_sql);
         </div>
     </div>
     <script src="js/jquery-1.11.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
     <script src="js/plugins.js"></script>
     <script src="js/script.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('.add_cart').click(function() {
+                const container = $(this).closest('.product_item');
+                const productId = container.find('.product_id').val();
+                const price = container.find('.price').val();
+                const userId = container.find('.user_id').val();
+                const quantity = container.find('input[name="quantity"]').val();
+                $.ajax({
+                    url: 'cart.php',
+                    type: 'POST',
+                    data: {
+                        product_id: productId,
+                        price: price,
+                        user_id: userId,
+                        qty: quantity,
+                    },
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response) {
+                            Swal.fire({
+                                position: "top-end",
+                                icon: "success",
+                                title: "Add to cart Success",
+                                showConfirmButton: false,
+                                timer: 1500
+                            });
+                            cartList()
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(error);
+                    }
+                });
+
+            })
+            cartList()
+
+            function cartList() {
+                $.ajax({
+                    url: "cart_list.php",
+                    type: 'POST',
+                    data: {},
+                    dataType: 'json',
+                    success: function(response) {
+                        let originalPrice = 0;
+                        $('.cart_lists').html('')
+                        $('.cart_counts').text(response.length)
+                        response.forEach(item => {
+                            let sale_price = 0;
+                            let sub_total = 0;
+                            if (item.discount_id) {
+                                sale_price = item.sale_price - ((item.sale_price * item.percent) / 100)
+                            } else {
+                                sale_price = item.sale_price
+                            }
+                            sub_total = parseInt(sale_price) * item.qty
+                            originalPrice += sub_total
+                            const description = item.description.length > 18 ?
+                                item.description.slice(0, 18) + "..." :
+                                item.description;
+                            let html = `<li class="list-group-item d-flex justify-content-between lh-sm">
+                                            <div class="col-4">
+                                                <h6 class="my-0">${item.name}</h6>
+                                                <small class="text-body-secondary">${description}</small>
+                                            </div>
+                                            <span class="text-body-secondary col-2">${item.qty}</span>
+                                            <span class="text-body-secondary col-3">${sale_price}</span>
+                                            = 
+                                            <span class="text-body-secondary col-3">${sub_total}</span>
+                                        </li>`
+                            $('.cart_lists').append(html)
+                        })
+                        $('.total_cart_price').text(originalPrice + 'MMK');
+                    }
+                })
+            }
+        })
+    </script>
 </body>
 
 </html>
