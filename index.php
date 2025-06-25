@@ -33,6 +33,8 @@ $trending_product_sql = "SELECT
                     LIMIT 10";
 $trending_product_res  = $mysqli->query($trending_product_sql);
 
+$payment_res = selectData('payments', $mysqli);
+
 ?>
 
 <!DOCTYPE html>
@@ -145,7 +147,21 @@ $trending_product_res  = $mysqli->query($trending_product_sql);
                     <span>Total (MMK)</span>
                     <strong class="total_cart_price"></strong>
                 </div>
-                <button class="w-100 btn btn-primary btn-lg" type="submit">Continue to checkout</button>
+                <div class="form-group my-3">
+                    <label for="payment_method">Select Payment Type</label>
+                    <select name="payment_method" id="payment_method" class="form-select">
+                        <option value="">Please Choose Payment</option>
+                        <?php if ($payment_res->num_rows > 0) {
+                            while ($row = $payment_res->fetch_assoc()) { ?>
+                                <option value="<?= $row['id'] ?>"><?= $row['name'] ?></option>
+                        <?php }
+                        } ?>
+                    </select>
+                    <span style="color: red; display: none;" class="payment_error">
+                        please choose payment method
+                    </span>
+                </div>
+                <button class="w-100 btn btn-primary btn-lg order_btn" type="submit">Continue to checkout</button>
             </div>
         </div>
     </div>
@@ -1511,6 +1527,7 @@ $trending_product_res  = $mysqli->query($trending_product_sql);
     <script src="js/script.js"></script>
     <script>
         $(document).ready(function() {
+            let cartCount = 0;
             $('.add_cart').click(function() {
                 const container = $(this).closest('.product_item');
                 const productId = container.find('.product_id').val();
@@ -1555,6 +1572,7 @@ $trending_product_res  = $mysqli->query($trending_product_sql);
                     dataType: 'json',
                     success: function(response) {
                         let originalPrice = 0;
+                        cartCount = response.length
                         $('.cart_lists').html('')
                         $('.cart_counts').text(response.length)
                         response.forEach(item => {
@@ -1586,6 +1604,26 @@ $trending_product_res  = $mysqli->query($trending_product_sql);
                     }
                 })
             }
+            $('.order_btn').click(function() {
+                let payment_method = $('#payment_method').val();
+                console.log(payment_method, 'error');
+
+                $('.payment_error').hide()
+                if (cartCount === 0) {
+                    Swal.fire({
+                        title: "Please add cart",
+                        icon: "warning",
+                        draggable: true
+                    });
+                } else if (!payment_method) {
+                    Swal.fire({
+                        title: "Please choose Payment Method",
+                        icon: "warning",
+                        draggable: true
+                    });
+                    $('.payment_error').show()
+                }
+            })
         })
     </script>
 </body>
