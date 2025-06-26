@@ -26,7 +26,6 @@ if ($product_id && $price && $user_id && $qty) {
             'product_id'    => $product_id,
             'user_id'       => $user_id,
             'qty'           => $qty,
-            'description'   => '',
         ];
         $cart_res  = insertData('carts', $mysqli, $data);
     }

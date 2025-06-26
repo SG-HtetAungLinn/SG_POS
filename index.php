@@ -477,7 +477,6 @@ $payment_res = selectData('payments', $mysqli);
 
                                     <?php if ($trending_product_res->num_rows > 0) {
                                         while ($row = $trending_product_res->fetch_assoc()) {
-                                            var_dump($row['discount_id'] > 0);
                                     ?>
                                             <div class="col">
                                                 <div class="product-item">
@@ -1588,15 +1587,20 @@ $payment_res = selectData('payments', $mysqli);
                             const description = item.description.length > 18 ?
                                 item.description.slice(0, 18) + "..." :
                                 item.description;
-                            let html = `<li class="list-group-item d-flex justify-content-between lh-sm">
-                                            <div class="col-4">
+                            let html = `<li class="list-group-item d-flex justify-content-between align-items-center lh-sm">
+                                            <div class="col-3">
                                                 <h6 class="my-0">${item.name}</h6>
                                                 <small class="text-body-secondary">${description}</small>
                                             </div>
-                                            <span class="text-body-secondary col-2">${item.qty}</span>
-                                            <span class="text-body-secondary col-3">${sale_price}</span>
+                                            <div class="d-flex gap-2 col-4 qty_container">
+                                                <button class="btn btn-secondary btn-sm qty_minus" type="button">-</button>
+                                                <input type="text" class="form-control qty" value="${item.qty}"/>
+                                                <button class="btn btn-secondary btn-sm qty_plus">+</button>
+                                                <input type="hidden" class="product_id" value="${item.id}"/>
+                                            </div>
+                                            <span class="text-body-secondary col-2 ps-2">${sale_price}</span>
                                             = 
-                                            <span class="text-body-secondary col-3">${sub_total}</span>
+                                            <span class="text-body-secondary col-2">${sub_total}</span>
                                         </li>`
                             $('.cart_lists').append(html)
                         })
@@ -1606,8 +1610,6 @@ $payment_res = selectData('payments', $mysqli);
             }
             $('.order_btn').click(function() {
                 let payment_method = $('#payment_method').val();
-                console.log(payment_method, 'error');
-
                 $('.payment_error').hide()
                 if (cartCount === 0) {
                     Swal.fire({
@@ -1622,7 +1624,63 @@ $payment_res = selectData('payments', $mysqli);
                         draggable: true
                     });
                     $('.payment_error').show()
+                } else {
+                    $.ajax({
+                        url: "order.php",
+                        type: "POST",
+                        data: {
+                            payment_id: $('#payment_method').val(),
+                            user_id: $('.user_id').val()
+                        },
+                        dataType: 'json',
+                        success: function(res) {
+                            if (res.success) {
+                                Swal.fire({
+                                    title: res.message,
+                                    icon: "success",
+                                    draggable: true
+                                });
+                                cartList()
+                            } else {
+                                Swal.fire({
+                                    title: res.message,
+                                    icon: "error",
+                                    draggable: true
+                                });
+                            }
+                        },
+                        error: function(res, a, b) {
+                            Swal.fire({
+                                title: b,
+                                icon: a,
+                                draggable: true
+                            });
+                        }
+                    })
                 }
+            })
+            $(document).on('click', '.qty_minus, .qty_plus', function() {
+                let container = $(this).closest('.qty_container')
+                let qty = container.find('.qty').val()
+                let product_id = container.find('.product_id').val()
+                let isHasPlus = $(this).hasClass('qty_plus')
+                let finalQty = isHasPlus ? ++qty : --qty;
+                let user_id = $('.user_id').val()
+                $.ajax({
+                    url: "cart_update.php",
+                    type: "POST",
+                    data: {
+                        user_id,
+                        product_id,
+                        qty: finalQty
+                    },
+                    dataType: 'json',
+                    success: function(res) {
+                        if (res.success) {
+                            cartList()
+                        }
+                    }
+                })
             })
         })
     </script>

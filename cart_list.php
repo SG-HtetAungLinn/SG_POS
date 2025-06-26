@@ -9,8 +9,7 @@ header('Content-Type: application/json');
 $user_id = $_SESSION['id'];
 
 $sql = "SELECT 
-            carts.qty, 
-            carts.description AS cart_description,
+            carts.qty,
             products.*,
             discounts.percent
         FROM `carts`
