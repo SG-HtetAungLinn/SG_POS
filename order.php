@@ -9,7 +9,7 @@ $payment_id = $_POST['payment_id'];
 
 $cart_res = selectData('carts', $mysqli, "WHERE `user_id`=$user_id");
 $carts = [];
-if ($cart_res->num_rows === 0) {
+if ($cart_res->num_rows > 0) {
     while ($row = $cart_res->fetch_assoc()) {
         $data = [
             'user_id'       => $row['user_id'],

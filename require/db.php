@@ -132,6 +132,7 @@ function create_table($mysqli)
                 user_id INT NOT NULL,
                 payment_id INT NOT NULL,
                 qty INT NOT NULL,
+                status ENUM('pending', 'complete', 'reject') DEFAULT 'pending',
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE,
