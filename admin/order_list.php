@@ -4,7 +4,6 @@ require '../require/db.php';
 require '../require/common.php';
 $success = isset($_GET['success']) ? $_GET['success'] : '';
 $error = isset($_GET['error']) ? $_GET['error'] : '';
-// $res = selectData('payments', $mysqli, "", "*", "ORDER BY created_at DESC");
 
 $sql = "SELECT 
             O.*,
@@ -19,9 +18,9 @@ $sql = "SELECT
 $res = $mysqli->query($sql);
 $delete_id = isset($_GET['delete_id']) ?  $_GET['delete_id'] : '';
 if ($delete_id !== '') {
-    $res = deleteData('payments', $mysqli, "id=$delete_id");
+    $res = deleteData('orders', $mysqli, "id=$delete_id");
     if ($res) {
-        $url = $admin_base_url . "payment_list.php?success=Delete Payment Success";
+        $url = $admin_base_url . "order_list.php?success=Delete Order Success";
         header("Location: $url");
     }
 }
@@ -60,6 +59,7 @@ require './layouts/header.php';
                                     <th class="">Status</th>
                                     <th class="">Updated At</th>
                                     <th class="">Created At</th>
+                                    <th>Status</th>
                                     <th class="">Action</th>
                                 </tr>
                             </thead>
@@ -81,9 +81,18 @@ require './layouts/header.php';
                                             <td><?= date("Y-m-d g:i:s A", strtotime($row['updated_at'])) ?></td>
                                             <td><?= date("Y-m-d g:i:s A", strtotime($row['created_at'])) ?></td>
                                             <td>
+                                                <select name="status" class="form-control form-control-sm status" style="height: auto;">
+                                                    <option class="text-info" value="pending" <?= $row['status'] === 'pending' ? 'selected' : '' ?>>Pending</option>
+                                                    <option class="text-success" value="complete" <?= $row['status'] === 'complete' ? 'selected' : '' ?>>Complete</option>
+                                                    <option class="text-danger" value="reject" <?= $row['status'] === 'reject' ? 'selected' : '' ?>>Reject</option>
+                                                </select>
+                                                <input type="hidden" name="order_id" id="order_id" value="<?= $row['id'] ?>" />
+                                            </td>
+                                            <td>
                                                 <a href="<?= $admin_base_url . 'payment_edit.php?id=' . $row['id'] ?>" class="btn btn-sm btn-primary">Edit</a>
                                                 <button data-id="<?= $row['id'] ?>" class="btn btn-sm btn-danger delete_btn">Delete</button>
                                             </td>
+
                                         </tr>
                                 <?php }
                                 } ?>
@@ -101,6 +110,22 @@ require './layouts/header.php';
         ***********************************-->
 <script>
     $(document).ready(function() {
+        $('.status').change(function() {
+            let id = $('#order_id').val()
+            $.ajax({
+                url: "order_status.php",
+                type: "POST",
+                data: {
+                    id,
+                    status: $(this).val()
+                },
+                success: function(res) {
+                    if (res.success) {
+                        location.reload()
+                    }
+                }
+            })
+        })
         $('.delete_btn').click(function() {
             const id = $(this).data('id')
             Swal.fire({
@@ -113,7 +138,7 @@ require './layouts/header.php';
                 confirmButtonText: 'Yes, delete it!'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    window.location.href = 'payment_list.php?delete_id=' + id
+                    window.location.href = 'order_list.php?delete_id=' + id
                 }
             });
         })
